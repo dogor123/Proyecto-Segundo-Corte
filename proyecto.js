@@ -197,9 +197,9 @@ bot.dialog('/studies', [ //10º Dialog - método preguntar lugar
 
         if(ans1 == 'si' || ans1 == 'SI' || ans1 == 'Si')
         {
-            session.endConversation(`Lo mejor que puedes hacer es estudiar, es lo unico que no tiene precio`);
+            session.endConversation(`Lo mejor que puedes hacer es estudiar, es lo unico que no tiene precio. Que tengas un excelente dia`);
         }else{
-            session.endConversation(`Creo que lo mejor es estudiar`);
+            session.endConversation(`Creo que lo mejor es estudiar. Hasta luego`);
         }
     }
 ]); //ok
