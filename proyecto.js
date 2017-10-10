@@ -26,7 +26,7 @@ bot.dialog('/',[// 1º - dialog
     {
         if(!session.userData.name)//¿Cual es tu nombre?
         { 
-            builder.Prompts.text(session, '¿Cual es su nombre?');
+            builder.Prompts.text(session, 'Hola, ¿Cual es su nombre?');
         }else{
             next();
         }
@@ -36,17 +36,15 @@ bot.dialog('/',[// 1º - dialog
         if(results.response)
         {
             let msj = results.response;
-            session.userData.nombre = msj;            
+            session.userData.name = msj;            
         }
-        let emoji = emoji.get('hand');
+        let emoji1 = emoji.get('hand');
         
-        session.send(`hola ${session.userData.nombre} ${emoji}`);
+        session.send(`hola ${session.userData.name} ${emoji1}`);
         
         session.beginDialog('/place');
     }
 ]); //ok
-
-bot.set('persistConversationData', true);
 
 bot.dialog('/place', [ //2º dialog
     function(session,results,next)
@@ -65,30 +63,25 @@ bot.dialog('/place', [ //2º dialog
             session.conversationData.place = results.response;
         }
 
-        session.endConversation(`${session.conversationData.place} es un lugar bien chevere`);
-        session.beginDialog('/food');
-    }
-]); //ok
+        let emoji2 = emoji.get('sunny'); 
+        let emoji3 = emoji.get('sun_with_face'); 
 
-bot.dialog('/food', [ //3º Dialog - ¿Que es lo que mas le gusta comer?
-    function(session)
-    {
-        builder.Prompts.text(session, '¿Que es lo que mas le gusta comer?');
-    },
-    function (session, results)
-    {
-        let food = results.response;
-        let icon = emoji.get('fork_and_knife'); 
+        if(session.conversationData.place == 'cartago' || session.conversationData.place == 'CARTAGO' || session.conversationData.place == 'Cartago')
+            {
+                session.endConversation(`${session.conversationData.place} ${emoji3} el sol mas alegre de colombia`);
+            }else{
+                session.endConversation(`${session.conversationData.place} es un lugar bien chevere ${emoji2}`);
+            }  
 
-        session.endConversation(`wow,  ${food} es lo que mas me gusta! ${icon}`);
         session.beginDialog('/weather');
     }
 ]); //ok
 
-bot.dialog('/weather', [ //4º Dialog - ¿Que tal está el clima?
+bot.dialog('/weather', [ //3º Dialog - ¿Que tal está el clima?
     function(session)
     { 
-        builder.Prompts.text(session, `¿Que tal está el clima?` );
+        let emoji4 = emoji.get('cloud'); 
+        builder.Prompts.text(session, `¿Que tal está el clima? ${emoji4}` );
     },
     function (session, results)
     {
@@ -96,43 +89,11 @@ bot.dialog('/weather', [ //4º Dialog - ¿Que tal está el clima?
         session.dialogData.weather = clima;
 
         session.endConversation(`el ${session.dialogData.weather} es agradable`);
-        session.beginDialog('/sport');
+        session.beginDialog('/country');
     }
 ]); //ok
 
-bot.dialog('/sport', [ //5º Dialog - ¿Cuál es tu deporte favorito?
-    function(session)
-    {
-        builder.Prompts.text(session, '¿Cuál es su deporte favorito?');
-    },
-    function (session, results)
-    {
-        let sport = results.response;
-        session.endConversation(`Te gusta el ${sport}?, la verdad a mi no mucho`);
-        session.beginDialog('/status');
-    }
-]); //ok
-
-bot.dialog('/status', [ //6º Dialog - ¿Cuál es tu estado civil?
-    function(session)
-    {
-        builder.Prompts.text(session, '¿Cuál es su estado civil?');
-    },
-    function (session, results)
-    {
-        let status = results.response;
-
-        if(status == 'casado' || status == 'CASADO')
-        {
-            session.endConversation(`Me Alegra que estés ${status}`);
-        }else{
-            session.endConversation(`que bien por ti que estés ${status}`);
-        }
-        session.replaceDialog('/country');
-    }
-]); //ok
-
-bot.dialog('/country', [ //7º Dialog - ¿De que pais eres?
+bot.dialog('/country', [ //4º Dialog - ¿De que pais eres?
     function(session)
     {
         builder.Prompts.text(session, '¿De que pais eres?');
@@ -143,16 +104,32 @@ bot.dialog('/country', [ //7º Dialog - ¿De que pais eres?
 
         if(country == 'colombia' || country == 'COLOMBIA' || country == 'Colombia')
         {
-            session.endConversation(`${country} el tercer pais mas feliz del mundo`);
+            let emoji5 = emoji.get('heart_eyes');
+            session.endConversation(`${country} ${emoji5}el tercer pais mas feliz del mundo`);
         }else{
             session.endConversation(`${country} me gusta`);
         }
         
+        session.beginDialog('/food');
+    }
+]); //ok
+
+bot.dialog('/food', [ //5º Dialog - ¿Que es lo que mas le gusta comer?
+    function(session)
+    {
+        builder.Prompts.text(session, '¿Que es lo que mas le gusta comer?');
+    },
+    function (session, results)
+    {
+        let food = results.response;
+        let emoji6 = emoji.get('fork_and_knife'); 
+
+        session.endConversation(`wow,  ${food} es lo que mas me gusta! ${emoji6}`);
         session.beginDialog('/tvshow');
     }
 ]); //ok
 
-bot.dialog('/tvshow', [ //8º Dialog - ¿Cuál es su programa de televisión favorito?
+bot.dialog('/tvshow', [ //6º Dialog - ¿Cuál es su programa de televisión favorito?
     function(session)
     {
         builder.Prompts.text(session, '¿Cuál es su programa de televisión favorito?');
@@ -162,7 +139,36 @@ bot.dialog('/tvshow', [ //8º Dialog - ¿Cuál es su programa de televisión fav
         let tvshow = results.response;
 
         session.endConversation(`te gusta ${tvshow}?, a mi me encanta!`);
-        session.beginDialog('/movie');
+        session.beginDialog('/sport');
+    }
+]); //ok
+
+bot.dialog('/sport', [ //7º Dialog - ¿Cuál es tu deporte favorito?
+    function(session)
+    {
+        builder.Prompts.text(session, '¿Cuál es su deporte favorito?');
+    },
+    function (session, results)
+    {
+        let sport = results.response;
+        let emoji8 = emoji.get('bike');
+        
+        session.endConversation(`Te gusta el ${sport}?, la verdad a mi me gusta el ciclismo  ${emoji8}`);
+        session.beginDialog('/status');
+    }
+]); //ok
+
+bot.dialog('/status', [ //8º Dialog - ¿Cuál es tu estado civil?
+    function(session)
+    {
+        builder.Prompts.text(session, '¿Cuál es su estado civil?');
+    },
+    function (session, results)
+    {
+        let status = results.response;
+        let emoji9 = emoji.get('unamused');
+        session.endConversation(`que bien por ti que estés ${status} ${emoji9}`);
+        session.replaceDialog('/movie');
     }
 ]); //ok
 
@@ -183,7 +189,7 @@ bot.dialog('/movie', [ //9º Dialog - método preguntar lugar
 bot.dialog('/studies', [ //10º Dialog - método preguntar lugar
     function(session)
     {
-        builder.Prompts.text(session, `Actualmente estas estuadiando?`);
+        builder.Prompts.text(session, `Actualmente estas estudiando?`);
     },
     function (session, results)
     {
@@ -191,24 +197,9 @@ bot.dialog('/studies', [ //10º Dialog - método preguntar lugar
 
         if(ans1 == 'si' || ans1 == 'SI' || ans1 == 'Si')
         {
-            session.endConversation();
-            session.beginDialog('/career');
+            session.endConversation(`Lo mejor que puedes hacer es estudiar, es lo unico que no tiene precio`);
         }else{
             session.endConversation(`Creo que lo mejor es estudiar`);
-            session.beginDialog('/goodbye');
         }
     }
-]); //ok
-
-bot.dialog('/career', [ //11 Dialog - ¿qué estudias por ahora?
-    function(session)
-    {
-        builder.Prompts.text(session, `¿qué estudias por ahora?`);
-    },
-    function (session, results)
-    {
-        let career = results.response;
-
-            session.endConversation(`${career} esa carrera si me gusta, excelente decision!`);
-        }
 ]); //ok
